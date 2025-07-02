@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Thap" ALTER COLUMN "address" DROP NOT NULL,
+ALTER COLUMN "image" DROP NOT NULL;
