@@ -29,7 +29,7 @@ export async function createSession(userId) {
     const cookieStore = await cookies()
     
     cookieStore.set("auth_token",session,{
-        httpOnly:true,
+        // httpOnly:true,
         secure:true,
         expires:expiresAt,
         sameSite:"lax",
