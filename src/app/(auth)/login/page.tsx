@@ -6,20 +6,27 @@ import React, { ChangeEvent, FormEvent, useState } from 'react'
 import { toast } from 'sonner'
 
 function Loginpage() {
-    const initFormData:SignInDataType = {
-        email:"",
-        password:""
+    const initFormData: SignInDataType = {
+        email: "",
+        password: ""
     }
-    const [formData,setFormData] = useState<SignInDataType>(initFormData)
+    const [formData, setFormData] = useState<SignInDataType>(initFormData)
 
-    function handleChange(e:ChangeEvent<HTMLInputElement>){
-        setFormData((prev)=>({...prev,[e.target.name]:e.target.value}))
+    //eslint-disable-next-line react-hooks/rules-of-hooks
+    const [loading, setLoading] = useState(false)
+
+    function handleChange(e: ChangeEvent<HTMLInputElement>) {
+        setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
     }
 
-    async function handleSub(e:FormEvent){
+
+
+
+    async function handleSub(e: FormEvent) {
+        setLoading(true)
         e.preventDefault()
         let itRedirect = false
-         try {
+        try {
             const response = await fetch("/api/auth/user/signin", {
                 method: "POST",
                 headers: {
@@ -43,14 +50,16 @@ function Loginpage() {
             if (error instanceof Error) {
                 toast.error(error.message)
             }
-        }
-        if(itRedirect){
-            return redirect("/")
+        }finally{
+            if (itRedirect) {
+                return redirect("/")
+            }
+            setLoading(false)
         }
     }
-    
-  return (
-    <div className='w-full h-[100vh] flex items-center justify-center'>
+
+    return (
+        <div className='w-full h-[100vh] flex items-center justify-center'>
             <form onSubmit={handleSub} className='max-w-[340px] flex flex-col items-center gap-y-3 h-auto p-3 border border-gray-200 rounded-md shadow-md'>
                 <h1><span className='text-red-400'>একাউন্ট</span> এ ঢুকার জন্য ফর্ম পুরন করুন</h1>
                 <div className='text-sm w-full'>
@@ -61,13 +70,13 @@ function Loginpage() {
                     <label htmlFor="password"><span className='text-red-400'>পাসওয়ার্ড</span> দিনঃ <sup className='text-red-400'>*</sup> </label>
                     <input type="password" id='password' name='password' value={formData.password} onChange={handleChange} className='w-full h-9 border border-gray-300 px-2 outline-0 rounded-md transition-all duration-100 ease-in-out focus:border-blue-500' />
                 </div>
-                <button type='submit' className='w-full py-1 rounded-md border hover:bg-red-500 transition-colors duration-200 ease-in-out bg-red-400 text-white shadow-md cursor-pointer'>
+                <button disabled={loading} type='submit' className={`w-full py-1 rounded-md border transition-colors duration-200 ease-in-out ${loading?"bg-gray-400":"bg-red-400 hover:bg-red-500"} text-white shadow-md cursor-pointer`}>
                     ঢুকান
                 </button>
-                <Link href={"/signup"} className='text-xs'>আমার কোনো <span className='text-red-400'>একাউন্ট</span> নেই</Link>
+                <Link  href={"/signup"} className='text-xs'>আমার কোনো <span className='text-red-400'>একাউন্ট</span> নেই</Link>
             </form>
-    </div>
-  )
+        </div>
+    )
 }
 
 export default Loginpage

@@ -17,6 +17,9 @@ function SignUppage() {
     const [formData,setFormData] = useState<SignUpDataType>(initFormData)
     const [TandC,setTandC] = useState(false)
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [loading,setLoading] = useState(false)
+
     const secretRef = useRef<HTMLInputElement>(null)
 
     function handleChange(e:ChangeEvent<HTMLInputElement>){
@@ -25,6 +28,7 @@ function SignUppage() {
 
     async function handleSub(e:FormEvent){
         e.preventDefault()
+        setLoading(false)
         let itRedirect = false
          try {
             if(secretRef.current?.value == SECRET_FOR_REQ_USER_CREATE){
@@ -58,11 +62,13 @@ function SignUppage() {
             if (error instanceof Error) {
                 toast.error(error.message)
             }
+        }finally{
+            if(itRedirect){
+                return redirect("/")
+            }
+            setLoading(false)
         }
 
-        if(itRedirect){
-            return redirect("/")
-        }
 
     }
     
@@ -94,7 +100,7 @@ function SignUppage() {
                     <input required onChange={()=>setTandC(!TandC)} checked={TandC} type="checkbox" id='password' className='border border-gray-300 px-2 outline-0 rounded-md transition-all duration-100 ease-in-out focus:border-blue-500' />
                     <label htmlFor="terms" className='text-xs'> আপনি কি আমাদের টার্মস অ্যান্ড কন্ডিশনের সাথে একমত? <Link href={"/read_terms_and_condition"} className='text-red-400'>পড়ুন</Link></label>
                 </label>
-                <button disabled={!TandC} type='submit' className={`w-full py-1 rounded-md border transition-colors duration-200 ease-in-out ${TandC?"bg-red-400 hover:bg-red-500":"bg-gray-300"} text-white shadow-md cursor-pointer`}>
+                <button disabled={!TandC || loading} type='submit' className={`w-full py-1 rounded-md border transition-colors duration-200 ease-in-out ${TandC ?"bg-red-400 hover:bg-red-500":"bg-gray-300"} text-white shadow-md cursor-pointer`}>
                     ঢুকান
                 </button>
                  <Link href={"/login"} className='text-xs'>আমার <span className='text-red-400'>একাউন্ট</span> আছে</Link>

@@ -63,7 +63,9 @@ export async function POST(request: NextRequest) {
 
 }
 
-export async function GET(requset:NextRequest) {
-    console.log(requset.cookies.get("auth_token")?.value)
-    return NextResponse.json(requset)
+export async function GET() {
+    const orders = await prisma.thap.findMany({
+        take:10
+    })
+    NextResponse.json(orders)    
 }

@@ -1,3 +1,4 @@
+import {  LogOut } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
@@ -16,8 +17,15 @@ function HomeNavbar() {
         <li>
           <Link href={"/history"}>ঠাপানোর <span className='text-red-400'>হিস্টরি</span></Link>
         </li>
+        <span className='text-gray-500'>|</span>
         <li>
-          <Link href={"/logout"}><span className='text-red-400'>logout</span></Link>
+          <Link href={"/blog"}>ঠাপানোর <span className='text-red-400'>ব্লগ</span></Link>
+        </li>
+        <span className='text-gray-500'>|</span>
+        <li>
+          <Link href={"/logout"}>
+            <LogOut />
+          </Link>
         </li>
       </ul>
 
